@@ -21,15 +21,16 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Chemistry",
   "Topic :: Scientific/Engineering :: Physics",
 ]
-dependencies = ["cffi", "numpy"]
-optional-dependencies.ase = ["ase"]
-optional-dependencies.dev = ["ruff"]
-optional-dependencies.qcschema = ["qcelemental"]
-optional-dependencies.test = [
-  "pytest>=8.3.5",
-  "pytest-cov",
+dependencies = [
   "ase",
+  "cffi",
+  "numpy",
   "qcelemental",
+]
+optional-dependencies.dev = [
+  "ruff",
+  "pytest-cov",
+  "pytest",
 ]
 
 

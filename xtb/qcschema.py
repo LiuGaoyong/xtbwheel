@@ -34,25 +34,26 @@ Supported keywords are
 ======================== =========== ============================================
 """
 
-from typing import Union
 from tempfile import NamedTemporaryFile
-from ..libxtb import VERBOSITY_MUTED, get_api_version
-from ..interface import Calculator, XTBException
-from ..utils import get_method, get_solvent
+from typing import Union
+
 import qcelemental as qcel
 
+from ..interface import Calculator, XTBException
+from ..libxtb import VERBOSITY_MUTED, get_api_version
+from ..utils import get_method, get_solvent
 
 _keywords = [
     "accuracy",
     "electronic_temperature",
     "max_iterations",
     "solvent",
-    "verbosity"
+    "verbosity",
 ]
 
 
 def run_qcschema(
-    input_data: Union[dict, qcel.models.AtomicInput]
+    input_data: Union[dict, qcel.models.AtomicInput],
 ) -> qcel.models.AtomicResult:
     """Perform a calculation based on an atomic input model.
 
@@ -105,9 +106,7 @@ def run_qcschema(
             properties={},
             error=qcel.models.ComputeError(
                 error_type="input_error",
-                error_message="Invalid method {} provided in model".format(
-                    atomic_input.model.method
-                ),
+                error_message=f"Invalid method {atomic_input.model.method} provided in model",
             ),
         )
 
@@ -174,7 +173,9 @@ def run_qcschema(
                 "dipole": properties["scf_dipole_moment"],
             }
             if _wfn:
-                return_result["mulliken_charges"] = extras["xtb"]["mulliken_charges"]
+                return_result["mulliken_charges"] = extras["xtb"][
+                    "mulliken_charges"
+                ]
                 return_result["mayer_indices"] = extras["xtb"]["mayer_indices"]
         else:
             return_result = 0.0
@@ -187,14 +188,15 @@ def run_qcschema(
                 ),
             )
 
-        ret_data['extras'].update(extras)
+        ret_data["extras"].update(extras)
 
     except XTBException as ee:
         success = False
 
         ret_data.update(
             error=qcel.models.ComputeError(
-                error_type="runtime_error", error_message=str(ee),
+                error_type="runtime_error",
+                error_message=str(ee),
             ),
         )
         return_result = 0.0

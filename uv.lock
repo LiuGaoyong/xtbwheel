@@ -2351,49 +2351,37 @@ name = "xtbwheel"
 version = "22.1"
 source = { editable = "." }
 dependencies = [
+    { name = "ase", version = "3.23.0", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version < '3.9'" },
+    { name = "ase", version = "3.25.0", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version >= '3.9'" },
     { name = "cffi" },
     { name = "numpy", version = "1.24.4", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version < '3.9'" },
     { name = "numpy", version = "2.0.2", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version == '3.9.*'" },
     { name = "numpy", version = "2.2.6", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version == '3.10.*'" },
     { name = "numpy", version = "2.3.1", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version >= '3.11'" },
-]
-
-[package.optional-dependencies]
-ase = [
-    { name = "ase", version = "3.23.0", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version < '3.9'" },
-    { name = "ase", version = "3.25.0", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version >= '3.9'" },
-]
-dev = [
-    { name = "ruff" },
-]
-qcschema = [
     { name = "qcelemental", version = "0.27.1", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version == '3.9.*'" },
     { name = "qcelemental", version = "0.29.0", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version != '3.9.*'" },
 ]
-test = [
-    { name = "ase", version = "3.23.0", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version < '3.9'" },
-    { name = "ase", version = "3.25.0", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version >= '3.9'" },
+
+[package.optional-dependencies]
+dev = [
     { name = "pytest", version = "8.3.5", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version < '3.9'" },
     { name = "pytest", version = "8.4.1", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version >= '3.9'" },
     { name = "pytest-cov", version = "5.0.0", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version < '3.9'" },
     { name = "pytest-cov", version = "6.2.1", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version >= '3.9'" },
-    { name = "qcelemental", version = "0.27.1", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version == '3.9.*'" },
-    { name = "qcelemental", version = "0.29.0", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version != '3.9.*'" },
+    { name = "ruff" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "ase", marker = "extra == 'ase'" },
-    { name = "ase", marker = "extra == 'test'" },
+    { name = "ase" },
     { name = "cffi" },
     { name = "numpy" },
-    { name = "pytest", marker = "extra == 'test'", specifier = ">=8.3.5" },
-    { name = "pytest-cov", marker = "extra == 'test'" },
-    { name = "qcelemental", marker = "extra == 'qcschema'" },
-    { name = "qcelemental", marker = "extra == 'test'" },
+    { name = "pytest", marker = "extra == 'dev'" },
+    { name = "pytest-cov", marker = "extra == 'dev'" },
+    { name = "qcelemental" },
     { name = "ruff", marker = "extra == 'dev'" },
 ]
-provides-extras = ["ase", "dev", "qcschema", "test"]
+provides-extras = ["dev"]
 
 [[package]]
 name = "zipp"
