@@ -29,7 +29,7 @@ install = true
 xtb_dep = dependency(
   'xtb',
   version: '>=@0@'.format(meson.project_version()),
-  fallback: ['xtb-6.5.1', 'xtb_dep'],
+  fallback: ['xtb-latest', 'xtb_dep'],
   default_options: [
     'default_library=static',
     'c_api=true',
