@@ -1,12 +1,12 @@
 [build-system]
-requires = ["meson-python", "cffi"]
+requires = ["meson-python", "cffi", "setuptools"]
 build-backend = "mesonpy"
 
 [project]
 name = "xtbwheel"
-version = "22.1"
+version = "v6.7.1"
 readme = "README.md"
-requires-python = ">=3.9, <=3.13"
+requires-python = ">=3.9, <3.14"
 description = "Python API for the extended tight-binding program"
 classifiers = [
   "Intended Audience :: Science/Research",

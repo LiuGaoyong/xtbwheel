@@ -16,29 +16,29 @@
 # along with xtb.  If not, see <https://www.gnu.org/licenses/>.
 """Wrapper around the C-API of the xtb shared library."""
 
-from typing import List, Optional, Union
-from typing_extensions import Literal
 from enum import Enum, auto
-import numpy as np
+from typing import List, Optional, Union
 
+import numpy as np
+from typing_extensions import Literal
 
 from .libxtb import (
-    ffi as _ffi,
-    lib as _lib,
-    new_environment,
-    new_molecule,
-    new_calculator,
-    new_results,
-    copy_results,
     VERBOSITY_FULL,
     VERBOSITY_MINIMAL,
-    VERBOSITY_MUTED
+    VERBOSITY_MUTED,
+    copy_results,
+    new_calculator,
+    new_environment,
+    new_molecule,
+    new_results,
 )
+from .libxtb import ffi as _ffi
+from .libxtb import lib as _lib
 
 _verbosity_flags = {
     "full": VERBOSITY_FULL,
     "minimal": VERBOSITY_MINIMAL,
-    "muted": VERBOSITY_MUTED
+    "muted": VERBOSITY_MUTED,
 }
 
 
@@ -209,7 +209,7 @@ class Environment:
         _message = _ffi.new("char[]", 512)
         _lib.xtb_getError(self._env, _message, _ref("int", 512))
         if message is not None:
-            return "{}:\n{}".format(message, _ffi.string(_message).decode())
+            return f"{message}:\n{_ffi.string(_message).decode()}"
         return _ffi.string(_message).decode()
 
     def show(self, message: str) -> None:
@@ -226,7 +226,9 @@ class Environment:
         """Release output unit from this environment"""
         _lib.xtb_releaseOutput(self._env)
 
-    def set_verbosity(self, verbosity: Union[Literal["full", "minimal", "muted"], int]) -> int:
+    def set_verbosity(
+        self, verbosity: Union[Literal["full", "minimal", "muted"], int]
+    ) -> int:
         """Set verbosity of calculation output"""
         verbosity = int(_verbosity_flags.get(str(verbosity), verbosity))
         _lib.xtb_setVerbosity(self._env, verbosity)
@@ -276,8 +278,8 @@ class Molecule(Environment):
         positions,
         charge: Optional[float] = None,
         uhf: Optional[int] = None,
-        lattice = None,
-        periodic = None,
+        lattice=None,
+        periodic=None,
     ):
         """Create new molecular structure data"""
         Environment.__init__(self)
@@ -285,7 +287,9 @@ class Molecule(Environment):
             raise ValueError("Expected tripels of cartesian coordinates")
 
         if 3 * numbers.size != positions.size:
-            raise ValueError("Dimension missmatch between numbers and positions")
+            raise ValueError(
+                "Dimension missmatch between numbers and positions"
+            )
 
         self._natoms = len(numbers)
         _numbers = np.ascontiguousarray(numbers, dtype="i4")
@@ -320,13 +324,17 @@ class Molecule(Environment):
         )
 
         if self.check() != 0:
-            raise XTBException(self.get_error("Setup of molecular structure failed"))
+            raise XTBException(
+                self.get_error("Setup of molecular structure failed")
+            )
 
     def __len__(self):
         return self._natoms
 
     def update(
-        self, positions: np.ndarray, lattice: Optional[np.ndarray] = None,
+        self,
+        positions: np.ndarray,
+        lattice: Optional[np.ndarray] = None,
     ) -> None:
         """Update coordinates and lattice parameters, both provided in
         atomic units (Bohr).
@@ -365,7 +373,9 @@ class Molecule(Environment):
         )
 
         if self.check() != 0:
-            raise XTBException(self.get_error("Update of molecular structure failed"))
+            raise XTBException(
+                self.get_error("Update of molecular structure failed")
+            )
 
 
 class Results(Environment):
@@ -525,7 +535,9 @@ class Results(Environment):
          [9.20433501e-01 2.74039053e-04 0.00000000e+00]]
         """
         _bond_orders = np.zeros((len(self), len(self)))
-        _lib.xtb_getBondOrders(self._env, self._res, _cast("double*", _bond_orders))
+        _lib.xtb_getBondOrders(
+            self._env, self._res, _cast("double*", _bond_orders)
+        )
         if self.check() != 0:
             raise XTBException(self.get_error())
         return _bond_orders
@@ -679,7 +691,13 @@ class Calculator(Molecule):
     ):
         """Create new calculator object"""
         Molecule.__init__(
-            self, numbers, positions, charge, uhf, lattice, periodic,
+            self,
+            numbers,
+            positions,
+            charge,
+            uhf,
+            lattice,
+            periodic,
         )
         self._calc = new_calculator()
         self._load(param)
@@ -688,16 +706,21 @@ class Calculator(Molecule):
         """Load parametrisation data into calculator"""
 
         if param == Param.IPEAxTB:
-            _filename = _ffi.new("char[]", "param_ipea-xtb.txt".encode())
+            _filename = _ffi.new("char[]", b"param_ipea-xtb.txt")
         else:
             _filename = _ffi.NULL
 
         self._loader[param](
-            self._env, self._mol, self._calc, _filename,
+            self._env,
+            self._mol,
+            self._calc,
+            _filename,
         )
 
         if self.check() != 0:
-            raise XTBException(self.get_error("Could not load parametrisation data"))
+            raise XTBException(
+                self.get_error("Could not load parametrisation data")
+            )
 
     def set_solvent(self, solvent: Optional[Solvent] = None) -> None:
         """Add/Remove a solvation model to/from calculator
@@ -711,7 +734,9 @@ class Calculator(Molecule):
         >>> calc.set_solvent(get_solvent("CHCl3"))  # Find correct enumerator
         """
         if solvent is not None:
-            _solvent = _ffi.new("char[]", _solvents.get(solvent, "none").encode())
+            _solvent = _ffi.new(
+                "char[]", _solvents.get(solvent, "none").encode()
+            )
             _lib.xtb_setSolvent(
                 self._env, self._calc, _solvent, _ffi.NULL, _ffi.NULL, _ffi.NULL
             )
@@ -750,7 +775,9 @@ class Calculator(Molecule):
         )
 
         if self.check() != 0:
-            raise XTBException(self.get_error("Failed to set external charge field"))
+            raise XTBException(
+                self.get_error("Failed to set external charge field")
+            )
 
     def release_external_charges(self) -> None:
         """Unset external point charge field"""
@@ -798,7 +825,9 @@ class Calculator(Molecule):
 
         _lib.xtb_setElectronicTemp(self._env, self._calc, etemp)
 
-    def singlepoint(self, res: Optional[Results] = None, copy: bool = False) -> Results:
+    def singlepoint(
+        self, res: Optional[Results] = None, copy: bool = False
+    ) -> Results:
         """Perform singlepoint calculation,
         note that the a previous result is overwritten by default.
 
@@ -819,11 +848,16 @@ class Calculator(Molecule):
             _res = Results(self)
 
         _lib.xtb_singlepoint(
-            self._env, self._mol, self._calc, _res._res,
+            self._env,
+            self._mol,
+            self._calc,
+            _res._res,
         )
 
         if self.check() != 0:
-            raise XTBException(self.get_error("Single point calculation failed"))
+            raise XTBException(
+                self.get_error("Single point calculation failed")
+            )
 
         return _res
 

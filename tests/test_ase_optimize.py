@@ -24,7 +24,7 @@ from ase.optimize.lbfgs import LBFGS
 from ase.units import fs
 from pytest import approx
 
-from xtb.ase.ase import XTB
+from xtbwheel.ase.ase import XTB
 
 
 def test_gfn1xtb_bfgs():

@@ -16,7 +16,7 @@
 # along with xtb.  If not, see <https://www.gnu.org/licenses/>.
 
 project(
-  'xtb-python',
+  'xtbwheel',
   'c',
   license: 'LGPL-3.0-or-later',
   default_options: [
@@ -97,12 +97,12 @@ xtb_pyext = python.extension_module(
 if install
   python.install_sources(
     files(
-      'xtb' / '__init__.py',
-      'xtb' / 'interface.py',
-      'xtb' / 'libxtb.py',
-      'xtb' / 'utils.py',
-      'xtb' / 'ase.py' ,
-      'xtb' / 'qcschema.py',
+      'xtbwheel' / '__init__.py',
+      'xtbwheel' / 'interface.py',
+      'xtbwheel' / 'libxtb.py',
+      'xtbwheel' / 'utils.py',
+      'xtbwheel' / 'ase.py' ,
+      'xtbwheel' / 'qcschema.py',
     ),
     subdir: 'xtb',
   )

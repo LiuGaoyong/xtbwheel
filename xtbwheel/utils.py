@@ -17,8 +17,8 @@
 """Helper functions to deal with xtb API objects"""
 
 from typing import Optional
-from .interface import Solvent, Param
 
+from .interface import Param, Solvent
 
 _methods = {
     "gfn2-xtb": Param.GFN2xTB,

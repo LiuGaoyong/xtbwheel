@@ -17,8 +17,9 @@
 
 
 from pkg_resources import parse_version
-from xtb import API_VERSION
-from xtb.libxtb import get_api_version
+
+from xtbwheel import API_VERSION
+from xtbwheel.libxtb import get_api_version
 
 
 def test_api_version():

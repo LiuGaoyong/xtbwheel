@@ -19,7 +19,7 @@ import pytest
 import qcelemental as qcel
 from pytest import approx
 
-from xtb.qcschema import run_qcschema
+from xtbwheel.qcschema import run_qcschema
 
 
 def test_gfn2xtb_energy():

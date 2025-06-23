@@ -57,12 +57,13 @@ Supported keywords are
 
 from typing import List, Optional
 
-from ..utils import get_method, get_solvent
-from ..libxtb import VERBOSITY_MUTED
-from ..interface import Calculator, XTBException
 import ase.calculators.calculator as ase_calc
 from ase.atoms import Atoms
-from ase.units import Hartree, Bohr
+from ase.units import Bohr, Hartree
+
+from .interface import Calculator, XTBException
+from .libxtb import VERBOSITY_MUTED
+from .utils import get_method, get_solvent
 
 
 class XTB(ase_calc.Calculator):
@@ -92,7 +93,9 @@ class XTB(ase_calc.Calculator):
     _xtb = None
 
     def __init__(
-        self, atoms: Optional[Atoms] = None, **kwargs,
+        self,
+        atoms: Optional[Atoms] = None,
+        **kwargs,
     ):
         """Construct the xtb base calculator object."""
 
@@ -167,7 +170,8 @@ class XTB(ase_calc.Calculator):
                 try:
                     _cell = self.atoms.cell
                     self._xtb.update(
-                        self.atoms.positions / Bohr, _cell / Bohr,
+                        self.atoms.positions / Bohr,
+                        _cell / Bohr,
                     )
                 # An exception in this part means the geometry is bad,
                 # still we will give a complete reset a try as well
@@ -181,7 +185,7 @@ class XTB(ase_calc.Calculator):
         _method = get_method(self.parameters.method)
         if _method is None:
             raise ase_calc.InputError(
-                "Invalid method {} provided".format(self.parameters.method)
+                f"Invalid method {self.parameters.method} provided"
             )
 
         try:
@@ -201,7 +205,9 @@ class XTB(ase_calc.Calculator):
             )
             calc.set_verbosity(VERBOSITY_MUTED)
             calc.set_accuracy(self.parameters.accuracy)
-            calc.set_electronic_temperature(self.parameters.electronic_temperature)
+            calc.set_electronic_temperature(
+                self.parameters.electronic_temperature
+            )
             calc.set_max_iterations(self.parameters.max_iterations)
             calc.set_solvent(get_solvent(self.parameters.solvent))
 

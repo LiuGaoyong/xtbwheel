@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with xtb.  If not, see <https://www.gnu.org/licenses/>.
 
-from xtb.interface import Param, Solvent
-from xtb.utils import get_method, get_solvent
-from pytest import raises
+from xtbwheel.interface import Param, Solvent
+from xtbwheel.utils import get_method, get_solvent
 
 
 def test_solvents():

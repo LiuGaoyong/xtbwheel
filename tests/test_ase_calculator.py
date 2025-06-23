@@ -27,7 +27,7 @@ from ase.atoms import Atoms
 from ase.calculators.calculator import CalculationFailed, InputError
 from pytest import approx, raises
 
-from xtb.ase.ase import XTB
+from xtbwheel.ase.ase import XTB
 
 
 def test_gfn2_xtb_0d():

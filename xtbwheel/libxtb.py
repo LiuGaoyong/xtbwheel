@@ -48,11 +48,7 @@ def get_api_version() -> str:
     For Python we want something that looks like a semantic version again.
     """
     api_version = lib.xtb_getAPIVersion()
-    return "{}.{}.{}".format(
-        api_version // 10000,
-        api_version % 10000 // 100,
-        api_version % 100,
-    )
+    return f"{api_version // 10000}.{api_version % 10000 // 100}.{api_version % 100}"
 
 
 def _delete_environment(env):
@@ -74,11 +70,20 @@ def _delete_molecule(mol):
     lib.xtb_delMolecule(ptr)
 
 
-def new_molecule(env, natoms, numbers, positions, charge, uhf, lattice, periodic):
+def new_molecule(
+    env, natoms, numbers, positions, charge, uhf, lattice, periodic
+):
     """Create new molecular structure data"""
     return ffi.gc(
         lib.xtb_newMolecule(
-            env, natoms, numbers, positions, charge, uhf, lattice, periodic,
+            env,
+            natoms,
+            numbers,
+            positions,
+            charge,
+            uhf,
+            lattice,
+            periodic,
         ),
         _delete_molecule,
     )

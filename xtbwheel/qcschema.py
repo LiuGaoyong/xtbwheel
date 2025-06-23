@@ -39,9 +39,9 @@ from typing import Union
 
 import qcelemental as qcel
 
-from ..interface import Calculator, XTBException
-from ..libxtb import VERBOSITY_MUTED, get_api_version
-from ..utils import get_method, get_solvent
+from .interface import Calculator, XTBException
+from .libxtb import VERBOSITY_MUTED, get_api_version
+from .utils import get_method, get_solvent
 
 _keywords = [
     "accuracy",
