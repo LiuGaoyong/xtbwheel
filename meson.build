@@ -91,7 +91,7 @@ xtb_pyext = python.extension_module(
   ),
   dependencies: [xtb_dep, python_dep],
   install: install,
-  subdir: 'xtb',
+  subdir: 'xtbwheel',
 )
 
 if install
@@ -104,6 +104,6 @@ if install
       'xtbwheel' / 'ase.py' ,
       'xtbwheel' / 'qcschema.py',
     ),
-    subdir: 'xtb',
+    subdir: 'xtbwheel',
   )
 endif

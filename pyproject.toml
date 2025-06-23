@@ -71,6 +71,6 @@ filterwarnings = [
 line-length = 80
 indent-width = 4
 select = ["F", "E", "W", "UP"]
-ignore = ["F722", 'UP038']
+ignore = ["F722", "UP035", "UP038"]
 [tool.ruff.pydocstyle]
 convention = "google"
