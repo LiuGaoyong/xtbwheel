@@ -101,29 +101,9 @@ if install
       'xtb' / 'interface.py',
       'xtb' / 'libxtb.py',
       'xtb' / 'utils.py',
-      'xtb' / 'test_interface.py',
-      'xtb' / 'test_libxtb.py',
-      'xtb' / 'test_utils.py',
+      'xtb' / 'ase.py' ,
+      'xtb' / 'qcschema.py',
     ),
     subdir: 'xtb',
-  )
-
-  python.install_sources(
-    files(
-      'xtb' / 'ase' / '__init__.py',
-      'xtb' / 'ase' / 'calculator.py',
-      'xtb' / 'ase' / 'test_calculator.py',
-      'xtb' / 'ase' / 'test_optimize.py',
-    ),
-    subdir: 'xtb' / 'ase',
-  )
-
-  python.install_sources(
-    files(
-      'xtb' / 'qcschema' / '__init__.py',
-      'xtb' / 'qcschema' / 'harness.py',
-      'xtb' / 'qcschema' / 'test_qcschema.py',
-    ),
-    subdir: 'xtb' / 'qcschema',
   )
 endif
