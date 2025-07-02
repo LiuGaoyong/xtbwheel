@@ -11,21 +11,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: mamba-org/setup-micromamba@v2
-      - run: >-
-          mamba create -n wheel
-          --yes
-          c-compiler
-          fortran-compiler
-          python
-          git
-          python-build
-          pkg-config
-          patchelf
-          cffi
-          numpy
-          meson
-          unzip
-          wheel
+        with:
+          environment-name: wheel
+          condarc: |
+            channels:
+              - conda-forge
+              - pytorch
+          create-args: >-
+            c-compiler
+            fortran-compiler
+            python
+            git
+            python-build
+            pkg-config
+            patchelf
+            cffi
+            numpy
+            meson
+            unzip
+            wheel
       - uses: actions/checkout@v4
       - run: conda activate wheel
       - run: python -m build --sdist
@@ -35,164 +39,164 @@ jobs:
           path: dist/xtbwheel-*.tar.gz
           retention-days: 5
 
-  wheels:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # linux-64
-          - os: ubuntu-latest
-            python: 39
-            platform_id: manylinux_x86_64
-          - os: ubuntu-latest
-            python: 310
-            platform_id: manylinux_x86_64
-          - os: ubuntu-latest
-            python: 311
-            platform_id: manylinux_x86_64
-          - os: ubuntu-latest
-            python: 312
-            platform_id: manylinux_x86_64
-          - os: ubuntu-latest
-            python: 313
-            platform_id: manylinux_x86_64
-          - os: ubuntu-latest
-            python: 313t
-            platform_id: manylinux_x86_64
-          # linux-aarch64
-          - os: ubuntu-24.04-arm
-            python: 39
-            platform_id: manylinux_aarch64
-          - os: ubuntu-24.04-arm
-            python: 310
-            platform_id: manylinux_aarch64
-          - os: ubuntu-24.04-arm
-            python: 311
-            platform_id: manylinux_aarch64
-          - os: ubuntu-24.04-arm
-            python: 312
-            platform_id: manylinux_aarch64
-          - os: ubuntu-24.04-arm
-            python: 313
-            platform_id: manylinux_aarch64
-          - os: ubuntu-24.04-arm
-            python: 313t
-            platform_id: manylinux_aarch64
-          # macos-x86-64
-          - os: macos-13
-            python: 39
-            platform_id: macosx_x86_64
-          - os: macos-13
-            python: 310
-            platform_id: macosx_x86_64
-          - os: macos-13
-            python: 311
-            platform_id: macosx_x86_64
-          - os: macos-13
-            python: 312
-            platform_id: macosx_x86_64
-          - os: macos-13
-            python: 313
-            platform_id: macosx_x86_64
-          - os: macos-13
-            python: 313t
-            platform_id: macosx_x86_64
-          # macos-arm64
-          - os: macos-14
-            python: 39
-            platform_id: macosx_arm64
-          - os: macos-14
-            python: 310
-            platform_id: macosx_arm64
-          - os: macos-14
-            python: 311
-            platform_id: macosx_arm64
-          - os: macos-14
-            python: 312
-            platform_id: macosx_arm64
-          - os: macos-14
-            python: 313
-            platform_id: macosx_arm64
-          - os: macos-14
-            python: 313t
-            platform_id: macosx_arm64
-          # win-64
-          - os: windows-2019
-            python: 39
-            platform_id: win_amd64
-          - os: windows-2019
-            python: 310
-            platform_id: win_amd64
-          - os: windows-2019
-            python: 311
-            platform_id: win_amd64
-          - os: windows-2019
-            python: 312
-            platform_id: win_amd64
-          - os: windows-2019
-            python: 313
-            platform_id: win_amd64
-          - os: windows-2019
-            python: 313t
-            platform_id: win_amd64
-    steps:
-      - uses: mamba-org/setup-micromamba@v2
-      - run: >-
-          mamba create -n wheel
-          --yes
-          c-compiler
-          fortran-compiler
-          python=${{ matrix.python }}
-          git
-          python-build
-          pkg-config
-          patchelf
-          cffi
-          numpy
-          meson
-          unzip
-          wheel
-      # - name: Download sdist
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: xtbwheel-sdist
-      - uses: actions/checkout@v4
-      - name: Build wheel
-        run: |
-          conda activate wheel
-          set -ex
-          tar xvf xtbwheel-*.tar.gz
-          python -m build xtbwheel-*/ --wheel ${{ env.SETUP_ARGS }}
-        env:
-          SETUP_ARGS: >-
-            -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
-            -Csetup-args=-Dmctc-lib:json=disabled
-      - uses: actions/upload-artifact@v4
-        with:
-          name: xtb-python-${{ matrix.python }}
-          path: xtbwheel-*/dist/*.whl
-          retention-days: 5
+  # wheels:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       include:
+  #         # linux-64
+  #         - os: ubuntu-latest
+  #           python: 39
+  #           platform_id: manylinux_x86_64
+  #         - os: ubuntu-latest
+  #           python: 310
+  #           platform_id: manylinux_x86_64
+  #         - os: ubuntu-latest
+  #           python: 311
+  #           platform_id: manylinux_x86_64
+  #         - os: ubuntu-latest
+  #           python: 312
+  #           platform_id: manylinux_x86_64
+  #         - os: ubuntu-latest
+  #           python: 313
+  #           platform_id: manylinux_x86_64
+  #         - os: ubuntu-latest
+  #           python: 313t
+  #           platform_id: manylinux_x86_64
+  #         # linux-aarch64
+  #         - os: ubuntu-24.04-arm
+  #           python: 39
+  #           platform_id: manylinux_aarch64
+  #         - os: ubuntu-24.04-arm
+  #           python: 310
+  #           platform_id: manylinux_aarch64
+  #         - os: ubuntu-24.04-arm
+  #           python: 311
+  #           platform_id: manylinux_aarch64
+  #         - os: ubuntu-24.04-arm
+  #           python: 312
+  #           platform_id: manylinux_aarch64
+  #         - os: ubuntu-24.04-arm
+  #           python: 313
+  #           platform_id: manylinux_aarch64
+  #         - os: ubuntu-24.04-arm
+  #           python: 313t
+  #           platform_id: manylinux_aarch64
+  #         # macos-x86-64
+  #         - os: macos-13
+  #           python: 39
+  #           platform_id: macosx_x86_64
+  #         - os: macos-13
+  #           python: 310
+  #           platform_id: macosx_x86_64
+  #         - os: macos-13
+  #           python: 311
+  #           platform_id: macosx_x86_64
+  #         - os: macos-13
+  #           python: 312
+  #           platform_id: macosx_x86_64
+  #         - os: macos-13
+  #           python: 313
+  #           platform_id: macosx_x86_64
+  #         - os: macos-13
+  #           python: 313t
+  #           platform_id: macosx_x86_64
+  #         # macos-arm64
+  #         - os: macos-14
+  #           python: 39
+  #           platform_id: macosx_arm64
+  #         - os: macos-14
+  #           python: 310
+  #           platform_id: macosx_arm64
+  #         - os: macos-14
+  #           python: 311
+  #           platform_id: macosx_arm64
+  #         - os: macos-14
+  #           python: 312
+  #           platform_id: macosx_arm64
+  #         - os: macos-14
+  #           python: 313
+  #           platform_id: macosx_arm64
+  #         - os: macos-14
+  #           python: 313t
+  #           platform_id: macosx_arm64
+  #         # win-64
+  #         - os: windows-2019
+  #           python: 39
+  #           platform_id: win_amd64
+  #         - os: windows-2019
+  #           python: 310
+  #           platform_id: win_amd64
+  #         - os: windows-2019
+  #           python: 311
+  #           platform_id: win_amd64
+  #         - os: windows-2019
+  #           python: 312
+  #           platform_id: win_amd64
+  #         - os: windows-2019
+  #           python: 313
+  #           platform_id: win_amd64
+  #         - os: windows-2019
+  #           python: 313t
+  #           platform_id: win_amd64
+  #   steps:
+  #     - uses: mamba-org/setup-micromamba@v2
+  #     - run: >-
+  #         mamba create -n wheel
+  #         --yes
+  #         c-compiler
+  #         fortran-compiler
+  #         python=${{ matrix.python }}
+  #         git
+  #         python-build
+  #         pkg-config
+  #         patchelf
+  #         cffi
+  #         numpy
+  #         meson
+  #         unzip
+  #         wheel
+  #     # - name: Download sdist
+  #     #   uses: actions/download-artifact@v4
+  #     #   with:
+  #     #     name: xtbwheel-sdist
+  #     - uses: actions/checkout@v4
+  #     - name: Build wheel
+  #       run: |
+  #         conda activate wheel
+  #         set -ex
+  #         tar xvf xtbwheel-*.tar.gz
+  #         python -m build xtbwheel-*/ --wheel ${{ env.SETUP_ARGS }}
+  #       env:
+  #         SETUP_ARGS: >-
+  #           -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
+  #           -Csetup-args=-Dmctc-lib:json=disabled
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: xtb-python-${{ matrix.python }}
+  #         path: xtbwheel-*/dist/*.whl
+  #         retention-days: 5
 
 
-  upload-release-assets:
-    needs:
-      - wheels
-      - sdist
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download files
-        uses: actions/download-artifact@v4
-        with:
-          merge-multiple: true
-          path: dist
-      - name: Upload assets to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/*
-          asset_name: sample.txt
-          tag: ${{ github.ref_name }}
+  # upload-release-assets:
+  #   needs:
+  #     - wheels
+  #     - sdist
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download files
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         merge-multiple: true
+  #         path: dist
+  #     - name: Upload assets to release
+  #       uses: svenstaro/upload-release-action@v2
+  #       with:
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #         file: dist/*
+  #         asset_name: sample.txt
+  #         tag: ${{ github.ref_name }}
 
   # upload:
   #   needs:
