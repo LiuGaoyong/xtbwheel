@@ -40,7 +40,7 @@ jobs:
             xtb=6.7.1
       - uses: actions/checkout@v4
       - name: Build wheels
-        run: python -m cibuildwheel --archs auto --output-dir wheelhouse ${{ env.SETUP_ARGS }}
+        run: python -m cibuildwheel --archs auto --output-dir wheelhouse
         env:
           SETUP_ARGS: >-
             -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
