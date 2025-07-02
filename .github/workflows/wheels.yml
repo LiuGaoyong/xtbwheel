@@ -12,7 +12,6 @@ jobs:
     steps:
       - uses: mamba-org/setup-micromamba@v2
         with:
-          init-shell: bash powershell
           environment-name: wheel
           condarc: |
             channels:
@@ -42,7 +41,7 @@ jobs:
         shell: micromamba-shell {0}
       - uses: actions/upload-artifact@v4
         with:
-          name: xtbwheel-sdist
+          name: xtbwheel-sdist.tar.gz
           path: dist/xtbwheel-*.tar.gz
           retention-days: 5
 
