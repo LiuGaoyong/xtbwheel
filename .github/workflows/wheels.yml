@@ -7,7 +7,6 @@ permissions:
 
 jobs:
   build_wheels:
-    name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -42,7 +41,7 @@ jobs:
             xtb=6.7.1
       - uses: actions/checkout@v4
       - name: Build wheels
-        run: python -m cibuildwheel --output-dir wheelhouse
+        run: python -m cibuildwheel --archs auto --output-dir wheelhouse ${{ env.SETUP_ARGS }}
         env:
           SETUP_ARGS: >-
             -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
