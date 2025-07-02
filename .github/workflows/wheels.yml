@@ -13,9 +13,24 @@ jobs:
   sdist:
     runs-on: ubuntu-latest
     steps:
+      - uses: setup-micromamba@v2
+      - run: >-
+          mamba create -n wheel
+          --yes
+          c-compiler
+          fortran-compiler
+          python
+          git
+          python-build
+          pkg-config
+          patchelf
+          cffi
+          numpy
+          meson
+          unzip
+          wheel
       - uses: actions/checkout@v4
-      - run: python -m pip install build
-      - run: python -m build --sdist
+      - run: conda activate wheel && python -m build --sdist
       - uses: actions/upload-artifact@v4
         with:
           name: xtbwheel-sdist
