@@ -28,7 +28,7 @@ jobs:
             patchelf
             cffi
             numpy
-            meson
+            meson-python
             unzip
             wheel
       - uses: actions/checkout@v4
