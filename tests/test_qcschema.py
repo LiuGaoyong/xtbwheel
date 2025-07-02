@@ -282,7 +282,7 @@ def test_gfn1xtb_gradient():
     )
     assert approx(atomic_result.return_result, abs=thr) == gradient
     assert (
-        atomic_result.extras["important"] == atomic_input["extras"]["important"]
+        atomic_result.extras["important"] == atomic_input["extras"]["important"]  # type: ignore
     )
 
 
@@ -599,7 +599,7 @@ def test_gfn2xtb_properties():
 
     assert atomic_result.success
     assert (
-        approx(atomic_result.return_result["mulliken_charges"], abs=thr)
+        approx(atomic_result.return_result["mulliken_charges"], abs=thr)  # type: ignore
         == charges
     )
 
@@ -641,7 +641,11 @@ def test_gfn2xtb_error():
     )
     error = qcel.models.ComputeError(
         error_type="runtime_error",
-        error_message="Setup of molecular structure failed:\n-1- xtb_api_newMolecule: Could not generate molecular structure",
+        error_message=(
+            "Setup of molecular structure failed:\n"
+            "-1- xtb_api_newMolecule: Could not "
+            "generate molecular structure."
+        ),
     )
 
     atomic_result = run_qcschema(atomic_input)

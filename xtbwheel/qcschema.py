@@ -24,14 +24,14 @@ The ``xtb`` model supports any method accepted by ``xtb.utils.get_method``.
 
 Supported keywords are
 
-======================== =========== ============================================
- Keyword                  Default     Description
-======================== =========== ============================================
- accuracy                 1.0         Numerical accuracy of the calculation
- electronic_temperature   300.0       Electronic temperatur for TB methods
- max_iterations           250         Iterations for self-consistent evaluation
- solvent                  "none"      GBSA implicit solvent model
-======================== =========== ============================================
+======================  =======  =========================================
+Keyword                 Default  Description
+======================  =======  =========================================
+accuracy                1.0      Numerical accuracy of the calculation
+electronic_temperature  300.0    Electronic temperatur for TB methods
+max_iterations          250      Iterations for self-consistent evaluation
+solvent                 "none"   GBSA implicit solvent model
+======================  =======  =========================================
 """
 
 from tempfile import NamedTemporaryFile
@@ -106,7 +106,11 @@ def run_qcschema(
             properties={},
             error=qcel.models.ComputeError(
                 error_type="input_error",
-                error_message=f"Invalid method {atomic_input.model.method} provided in model",
+                error_message=(
+                    "Invalid method "
+                    + str(atomic_input.model.method)
+                    + " provided in model",
+                ),
             ),
         )
 
@@ -184,7 +188,10 @@ def run_qcschema(
             ret_data.update(
                 error=qcel.models.ComputeError(
                     error_type="input_error",
-                    error_message="Calculation succeeded but invalid driver request provided",
+                    error_message=(
+                        "Calculation succeeded but invalid"
+                        + " driver request provided."
+                    ),
                 ),
             )
 

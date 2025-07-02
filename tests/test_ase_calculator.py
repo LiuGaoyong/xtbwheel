@@ -27,7 +27,7 @@ from ase.atoms import Atoms
 from ase.calculators.calculator import CalculationFailed, InputError
 from pytest import approx, raises
 
-from xtbwheel.ase.ase import XTB
+from xtbwheel.ase import XTB
 
 
 def test_gfn2_xtb_0d():
@@ -99,8 +99,7 @@ def test_gfn2_xtb_0d():
     )
     dipole_moment = np.array([0.62120710, 0.28006659, 0.04465985])
 
-    calc = XTB(method="GFN2-xTB", atoms=atoms)
-
+    atoms.calc = XTB(method="GFN2-xTB")
     assert approx(atoms.get_potential_energy(), abs=thr) == -592.6794366990786
     assert approx(atoms.get_forces(), abs=thr) == forces
     assert approx(atoms.get_charges(), abs=thr) == charges
@@ -304,4 +303,4 @@ def test_invalid_method():
     """GFN-xTB without method number is invalid, should raise an input error"""
 
     with raises(InputError):
-        calc = XTB(method="GFN-xTB")
+        _ = XTB(method="GFN-xTB")

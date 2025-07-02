@@ -17,10 +17,9 @@
 """Wrapper around the C-API of the xtb shared library."""
 
 from enum import Enum, auto
-from typing import List, Optional, Union
 
 import numpy as np
-from typing_extensions import Literal
+from typing_extensions import Literal, Self
 
 from .libxtb import (
     VERBOSITY_FULL,
@@ -32,8 +31,8 @@ from .libxtb import (
     new_molecule,
     new_results,
 )
-from .libxtb import ffi as _ffi
-from .libxtb import lib as _lib
+from .libxtb import ffi as _ffi  # type: ignore
+from .libxtb import lib as _lib  # type: ignore
 
 _verbosity_flags = {
     "full": VERBOSITY_FULL,
@@ -198,7 +197,7 @@ class Environment:
         """
         return _lib.xtb_checkEnvironment(self._env)
 
-    def get_error(self, message: Optional[str] = None) -> str:
+    def get_error(self, message: str | None = None) -> str:
         """Check for error messages
 
         Example
@@ -227,7 +226,7 @@ class Environment:
         _lib.xtb_releaseOutput(self._env)
 
     def set_verbosity(
-        self, verbosity: Union[Literal["full", "minimal", "muted"], int]
+        self, verbosity: Literal["full", "minimal", "muted"] | int
     ) -> int:
         """Set verbosity of calculation output"""
         verbosity = int(_verbosity_flags.get(str(verbosity), verbosity))
@@ -276,8 +275,8 @@ class Molecule(Environment):
         self,
         numbers,
         positions,
-        charge: Optional[float] = None,
-        uhf: Optional[int] = None,
+        charge: float | None = None,
+        uhf: int | None = None,
         lattice=None,
         periodic=None,
     ):
@@ -334,7 +333,7 @@ class Molecule(Environment):
     def update(
         self,
         positions: np.ndarray,
-        lattice: Optional[np.ndarray] = None,
+        lattice: np.ndarray | None = None,
     ) -> None:
         """Update coordinates and lattice parameters, both provided in
         atomic units (Bohr).
@@ -438,7 +437,7 @@ class Results(Environment):
 
     _res = _ffi.NULL
 
-    def __init__(self, res: Union[Molecule, "Results"]):
+    def __init__(self, res: Molecule | Self):
         """Create new singlepoint results object"""
         Environment.__init__(self)
         if isinstance(res, Results):
@@ -682,12 +681,12 @@ class Calculator(Molecule):
     def __init__(
         self,
         param: Param,
-        numbers: List[int],
-        positions: List[float],
-        charge: Optional[float] = None,
-        uhf: Optional[int] = None,
-        lattice: Optional[List[float]] = None,
-        periodic: Optional[List[bool]] = None,
+        numbers: np.ndarray | list[int],
+        positions: np.ndarray | list[float],
+        charge: float | None = None,
+        uhf: int | None = None,
+        lattice: np.ndarray | list[float] | None = None,
+        periodic: np.ndarray | list[bool] | None = None,
     ):
         """Create new calculator object"""
         Molecule.__init__(
@@ -722,14 +721,14 @@ class Calculator(Molecule):
                 self.get_error("Could not load parametrisation data")
             )
 
-    def set_solvent(self, solvent: Optional[Solvent] = None) -> None:
+    def set_solvent(self, solvent: Solvent | None = None) -> None:
         """Add/Remove a solvation model to/from calculator
 
         Example
         -------
         >>> from xtb.utils import get_solvent, Solvent
         ...
-        >>> calc.set_solvent(Solvent.h2o)  # Set solvent to water with enumerator
+        >>> calc.set_solvent(Solvent.h2o)  # Set solvent to water with enum
         >>> calc.set_solvent()  # Release solvent again
         >>> calc.set_solvent(get_solvent("CHCl3"))  # Find correct enumerator
         """
@@ -758,7 +757,8 @@ class Calculator(Molecule):
 
         if 3 * _npcem != positions.size:
             raise ValueError(
-                "Dimension missmatch between atomic numbers and cartesian coordinates"
+                "Dimension missmatch between atomic "
+                + "numbers and cartesian coordinates."
             )
 
         _numbers = np.ascontiguousarray(numbers, dtype="i4")
@@ -814,7 +814,7 @@ class Calculator(Molecule):
 
         _lib.xtb_setMaxIter(self._env, self._calc, maxiter)
 
-    def set_electronic_temperature(self, etemp: int) -> None:
+    def set_electronic_temperature(self, etemp: int | float) -> None:
         """Set electronic temperature in K for tight binding Hamiltonians,
         values smaller or equal to zero will be silently ignored by the API.
 
@@ -826,7 +826,9 @@ class Calculator(Molecule):
         _lib.xtb_setElectronicTemp(self._env, self._calc, etemp)
 
     def singlepoint(
-        self, res: Optional[Results] = None, copy: bool = False
+        self,
+        res: Results | None = None,
+        copy: bool = False,
     ) -> Results:
         """Perform singlepoint calculation,
         note that the a previous result is overwritten by default.

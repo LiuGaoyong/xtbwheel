@@ -43,19 +43,17 @@ Example
 
 Supported keywords are
 
-======================== ============ ============================================
- Keyword                  Default      Description
-======================== ============ ============================================
- method                   "GFN2-xTB"   Underlying method for energy and forces
- accuracy                 1.0          Numerical accuracy of the calculation
- electronic_temperature   300.0        Electronic temperatur for TB methods
- max_iterations           250          Iterations for self-consistent evaluation
- solvent                  "none"       GBSA implicit solvent model
- cache_api                True         Reuse generate API objects (recommended)
-======================== ============ ============================================
+======================  ==========  =========================================
+Keyword                 Default     Description
+======================  ==========  =========================================
+method                  "GFN2-xTB"  Underlying method for energy and forces
+accuracy                1.0         Numerical accuracy of the calculation
+electronic_temperature  300.0       Electronic temperatur for TB methods
+max_iterations          250         Iterations for self-consistent evaluation
+solvent                 "none"      GBSA implicit solvent model
+cache_api               True        Reuse generate API objects (recommended)
+======================  ==========  =========================================
 """
-
-from typing import List, Optional
 
 import ase.calculators.calculator as ase_calc
 from ase.atoms import Atoms
@@ -94,18 +92,17 @@ class XTB(ase_calc.Calculator):
 
     def __init__(
         self,
-        atoms: Optional[Atoms] = None,
+        atoms: Atoms | None = None,
         **kwargs,
     ):
         """Construct the xtb base calculator object."""
-
         ase_calc.Calculator.__init__(self, atoms=atoms, **kwargs)
+        self.parameters: ase_calc.Parameters = self.parameters
+        self.atoms: Atoms = self.atoms
 
     def set(self, **kwargs) -> dict:
         """Set new parameters to xtb"""
-
         changed_parameters = ase_calc.Calculator.set(self, **kwargs)
-
         self._check_parameters(changed_parameters)
 
         # Always reset the calculation if parameters change
@@ -151,7 +148,7 @@ class XTB(ase_calc.Calculator):
             self._xtb = None
             self._res = None
 
-    def _check_api_calculator(self, system_changes: List[str]) -> None:
+    def _check_api_calculator(self, system_changes: list[str]) -> None:
         """Check state of API calculator and reset if necessary"""
 
         # Changes in positions and cell parameters can use a normal update
@@ -168,7 +165,7 @@ class XTB(ase_calc.Calculator):
         else:
             if system_changes and self._xtb is not None:
                 try:
-                    _cell = self.atoms.cell
+                    _cell = self.atoms.cell.array
                     self._xtb.update(
                         self.atoms.positions / Bohr,
                         _cell / Bohr,
@@ -189,7 +186,7 @@ class XTB(ase_calc.Calculator):
             )
 
         try:
-            _cell = self.atoms.cell
+            _cell = self.atoms.cell.array
             _periodic = self.atoms.pbc
             _charge = self.atoms.get_initial_charges().sum()
             _uhf = int(self.atoms.get_initial_magnetic_moments().sum().round())
@@ -218,9 +215,9 @@ class XTB(ase_calc.Calculator):
 
     def calculate(
         self,
-        atoms: Optional[Atoms] = None,
-        properties: List[str] = None,
-        system_changes: List[str] = ase_calc.all_changes,
+        atoms: Atoms | None = None,
+        properties: list[str] | None = None,
+        system_changes: list[str] = ase_calc.all_changes,
     ) -> None:
         """Perform actual calculation with by calling the xtb API"""
 
@@ -241,7 +238,7 @@ class XTB(ase_calc.Calculator):
         # Check if a wavefunction object is present in results
         _wfn = self._res.get_number_of_orbitals() > 0
 
-        # These properties are garanteed to exist for all implemented calculators
+        # garanteed to exist for all implemented calculators
         self.results["energy"] = self._res.get_energy() * Hartree
         self.results["free_energy"] = self.results["energy"]
         self.results["forces"] = -self._res.get_gradient() * Hartree / Bohr

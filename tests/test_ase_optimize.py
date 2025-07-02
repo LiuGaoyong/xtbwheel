@@ -24,7 +24,7 @@ from ase.optimize.lbfgs import LBFGS
 from ase.units import fs
 from pytest import approx
 
-from xtbwheel.ase.ase import XTB
+from xtbwheel.ase import XTB
 
 
 def test_gfn1xtb_bfgs():
@@ -120,7 +120,7 @@ def test_gfn2xtb_lbfgs():
 
 
 def test_gfn2xtb_velocityverlet():
-    """Perform molecular dynamics with GFN2-xTB and Velocity Verlet Integrator"""
+    """Perform molecular dynamics with GFN2-xTB and Verlet Integrator"""
 
     thr = 1.0e-5
 

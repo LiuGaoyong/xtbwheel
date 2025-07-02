@@ -16,10 +16,15 @@
 # along with xtb.  If not, see <https://www.gnu.org/licenses/>.
 
 
-from pkg_resources import parse_version
-
 from xtbwheel import API_VERSION
 from xtbwheel.libxtb import get_api_version
+
+
+def parse_version(x: str) -> tuple[int, int, int]:
+    result: list[int] = [int(i) for i in str(x).split(".")]
+    if len(result) < 3:
+        result += [0] * (3 - len(result))
+    return result[0], result[1], result[2]
 
 
 def test_api_version():

@@ -361,7 +361,8 @@ def test_gfn2_xtb_3d():
     periodic = np.array([True, True, True])
 
     # GFN2-xTB does not support periodic boundary conditions,
-    # yet the constructor should not flag this error to keep the interface uniform
+    # yet the constructor should not flag this error
+    # to keep the interface uniform
     calc = Calculator(
         Param.GFN2xTB, numbers, positions, lattice=lattice, periodic=periodic
     )
@@ -688,7 +689,7 @@ def test_gfn2xtb_solvation():
 
 
 def test_gfn1xtb_orbitals():
-    """Try to access the GFN1-xTB wavefunction for a small molecule like water"""
+    """Try to access the GFN1-xTB wavefunction for a small molecule."""
     thr = 1.0e-6
 
     numbers = np.array([8, 1, 1])

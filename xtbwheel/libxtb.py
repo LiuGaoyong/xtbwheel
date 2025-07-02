@@ -29,7 +29,7 @@ Example
 """
 
 try:
-    from ._libxtb import ffi, lib
+    from ._libxtb import ffi, lib  # type: ignore
 except ImportError:
     raise ImportError("xtb C extension unimportable, cannot use C-API")
 
@@ -48,7 +48,12 @@ def get_api_version() -> str:
     For Python we want something that looks like a semantic version again.
     """
     api_version = lib.xtb_getAPIVersion()
-    return f"{api_version // 10000}.{api_version % 10000 // 100}.{api_version % 100}"
+    result: list[str] = [
+        f"{api_version // 10000}",
+        f"{api_version % 10000 // 100}",
+        f"{api_version % 100}",
+    ]
+    return ".".join(result)
 
 
 def _delete_environment(env):

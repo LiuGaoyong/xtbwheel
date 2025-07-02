@@ -28,24 +28,18 @@ dependencies = [
 ]
 [dependency-groups]
 dev = [
+  "build",
   "ruff>=0.11.2",
   "pytest>=8.3.5",
   "pytest-cov",
 ]
 
-
 # uv config
 [tool.uv]
-package = true
-[tool.uv.sources]
-torch = { index = "pytorch" }
+package = false
 [[tool.uv.index]]
 url = "https://mirror.nju.edu.cn/pypi/web/simple"
 default = true
-[[tool.uv.index]]
-url = "https://download.pytorch.org/whl"
-name = "pytorch"
-explicit = true
 
 
 # pytest config
