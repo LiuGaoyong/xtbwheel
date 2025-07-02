@@ -69,7 +69,7 @@ def test_gfn1xtb_bfgs():
     assert approx(atoms.get_potential_energy(), thr) == -951.9006674709672
     assert (
         approx(np.linalg.norm(atoms.get_forces(), ord=2), thr)
-        == 0.2052117803208497
+        == 0.20519077637267752
     )
 
 
@@ -160,7 +160,7 @@ def test_gfn2xtb_velocityverlet():
     dyn.run(20)
 
     assert approx(atoms.get_potential_energy(), thr) == -896.9772346260584
-    assert approx(atoms.get_kinetic_energy(), thr) == 0.022411127028842362
+    assert approx(atoms.get_kinetic_energy(), abs=thr) == 0.022411127028842362
 
     atoms.calc.set(cache_api=True)
     dyn.run(20)

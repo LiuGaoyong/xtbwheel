@@ -644,7 +644,7 @@ def test_gfn2xtb_error():
         error_message=(
             "Setup of molecular structure failed:\n"
             "-1- xtb_api_newMolecule: Could not "
-            "generate molecular structure."
+            "generate molecular structure"
         ),
     )
 

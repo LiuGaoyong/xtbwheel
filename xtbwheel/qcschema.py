@@ -106,10 +106,12 @@ def run_qcschema(
             properties={},
             error=qcel.models.ComputeError(
                 error_type="input_error",
-                error_message=(
-                    "Invalid method "
-                    + str(atomic_input.model.method)
-                    + " provided in model",
+                error_message="".join(
+                    [
+                        "Invalid method ",
+                        str(atomic_input.model.method),
+                        " provided in model",
+                    ]
                 ),
             ),
         )
