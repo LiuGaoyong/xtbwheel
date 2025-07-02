@@ -20,8 +20,8 @@ jobs:
               - conda-forge
               - pytorch
           create-args: >-
-            gcc=4
-            gfortran=8
+            c-compiler
+            fortran-compiler
             python=3.${{ matrix.python }}
             git
             python-build
@@ -37,8 +37,11 @@ jobs:
       - run: |
           python -m build --wheel ${{ env.SETUP_ARGS }}
           auditwheel show dist/*.whl
-          auditwheel repair dist/*.whl
+          auditwheel lddtree dist/*.whl
+          auditwheel repair -w . dist/*.whl --plat ${{ env.plat }}
+          auditwheel lddtree ./*.whl
         env:
+          plat: manylinux2014_x86_64
           SETUP_ARGS: >-
             -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
             -Csetup-args=-Dmctc-lib:json=disabled
@@ -46,5 +49,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: xtbwheel-cp3${{ matrix.python }}-linux.whl
-          path: dist/*.whl
+          path: ./*.whl
           retention-days: 5
