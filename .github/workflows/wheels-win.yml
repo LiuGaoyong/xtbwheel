@@ -1,0 +1,47 @@
+name: build
+on:
+  [push, pull_request]
+
+permissions:
+  contents: write
+
+jobs:
+  wheels:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['9', '10', '11', '12', '13']
+    steps:
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: wheel
+          condarc: |
+            channels:
+              - conda-forge
+              - pytorch
+          create-args: >-
+            c-compiler
+            fortran-compiler
+            python=3.${{ matrix.python }}
+            git
+            python-build
+            pkg-config
+            cffi
+            numpy
+            meson-python
+            setuptools
+            wheel
+            xtb=6.7.1
+      - uses: actions/checkout@v4
+      - run: python -m build --wheel ${{ env.SETUP_ARGS }}
+        env:
+          SETUP_ARGS: >-
+            -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
+            -Csetup-args=-Dmctc-lib:json=disabled
+        shell: bash -el {0}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xtbwheel-cp3${{ matrix.python }}-windows.whl
+          path: dist/*.whl
+          retention-days: 5

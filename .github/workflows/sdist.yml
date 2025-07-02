@@ -1,0 +1,43 @@
+on:
+  [push, pull_request]
+
+permissions:
+  contents: write
+
+jobs:
+
+  sdist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: wheel
+          condarc: |
+            channels:
+              - conda-forge
+              - pytorch
+          create-args: >-
+            c-compiler
+            fortran-compiler
+            python
+            git
+            python-build
+            pkg-config
+            cffi
+            numpy
+            meson-python
+            setuptools
+            wheel
+            xtb=6.7.1
+      - uses: actions/checkout@v4
+      - run: python -m build --sdist -n ${{ env.SETUP_ARGS }}
+        env:
+          SETUP_ARGS: >-
+            -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
+            -Csetup-args=-Dmctc-lib:json=disabled
+        shell: micromamba-shell {0}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xtbwheel-sdist.tar.gz
+          path: dist/xtbwheel-*.tar.gz
+          retention-days: 5
