@@ -28,24 +28,18 @@ jobs:
             c-compiler
             fortran-compiler
             python=3.${{ matrix.python }}
-            git
-            python-build
             pkg-config
-            cffi
-            numpy
             meson-python
-            setuptools
-            wheel
-            cibuildwheel
             xtb=6.7.1
       - uses: actions/checkout@v4
-      - name: Build wheels
-        run: python -m cibuildwheel --archs auto --output-dir wheelhouse
-        env:
-          SETUP_ARGS: >-
-            -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
-            -Csetup-args=-Dmctc-lib:json=disabled
+      - run: python -m pip install cibuildwheel>=3 numpy cffi
         shell: bash -el {0}
+      - run: python -m cibuildwheel --archs auto --output-dir wheelhouse
+        shell: bash -el {0}
+        # env:
+        #   SETUP_ARGS: >-
+        #     -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
+        #     -Csetup-args=-Dmctc-lib:json=disabled
       - uses: actions/upload-artifact@v4
         with:
           name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
