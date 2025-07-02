@@ -37,8 +37,9 @@ jobs:
       - run: |
           python -m build --wheel ${{ env.SETUP_ARGS }}
           auditwheel show dist/*.whl
-          auditwheel repair -w . dist/*.whl
+          auditwheel repair -w . dist/*.whl --plat ${{ env.plat }}
         env:
+          plat: manylinux${{ matrix.python == '3.9' && '2014' || '_2_12' }}_x86_64
           SETUP_ARGS: >-
             -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
             -Csetup-args=-Dmctc-lib:json=disabled

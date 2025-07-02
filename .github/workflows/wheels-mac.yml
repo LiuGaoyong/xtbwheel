@@ -41,7 +41,7 @@ jobs:
           python -m build --wheel ${{ env.SETUP_ARGS }}
           delocate-listdeps --all dist/*.whl
           delocate-wheel -w fixed_wheels -v dist/*.whl
-          delocate-listdeps --all dist/*.whl
+          delocate-listdeps --all fixed_wheels/*.whl
         env:
           SETUP_ARGS: >-
             -Csetup-args=-Dxtb-6.7.1:la_backend=netlib
@@ -50,5 +50,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: xtbwheel-cp3${{ matrix.python }}-${{ matrix.os }}.whl
-          path: dist/*.whl
+          path: fixed_wheels/*.whl
           retention-days: 5
