@@ -29,6 +29,7 @@ jobs:
             cffi
             numpy
             meson-python
+            setuptools
             unzip
             wheel
       - uses: actions/checkout@v4
