@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 1
 requires-python = ">=3.9, <3.14"
 resolution-markers = [
     "python_full_version >= '3.11'",
@@ -1524,6 +1524,15 @@ wheels = [
 ]
 
 [[package]]
+name = "setuptools"
+version = "80.9.0"
+source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }
+sdist = { url = "https://mirror.nju.edu.cn/pypi/web/packages/18/5d/3bf57dcd21979b887f014ea83c24ae194cfcd12b9e0fda66b957c69d1fca/setuptools-80.9.0.tar.gz", hash = "sha256:f36b47402ecde768dbfafc46e8e4207b4360c654f1f3bb84475f0a28628fb19c" }
+wheels = [
+    { url = "https://mirror.nju.edu.cn/pypi/web/packages/a3/dc/17031897dae0efacfea57dfd3a82fdd2a2aeb58e0ff71b77b87e44edc772/setuptools-80.9.0-py3-none-any.whl", hash = "sha256:062d34222ad13e0cc312a4c02d73f059e86a4acbfbdea8f8f76b28c99f306922" },
+]
+
+[[package]]
 name = "six"
 version = "1.17.0"
 source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }
@@ -1604,6 +1613,7 @@ dependencies = [
     { name = "numpy", version = "2.3.1", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "qcelemental", version = "0.27.1", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version < '3.10'" },
     { name = "qcelemental", version = "0.29.0", source = { registry = "https://mirror.nju.edu.cn/pypi/web/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "setuptools" },
 ]
 
 [package.dev-dependencies]
@@ -1620,6 +1630,7 @@ requires-dist = [
     { name = "cffi" },
     { name = "numpy" },
     { name = "qcelemental" },
+    { name = "setuptools" },
 ]
 
 [package.metadata.requires-dev]

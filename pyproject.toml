@@ -20,19 +20,9 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Chemistry",
   "Topic :: Scientific/Engineering :: Physics",
 ]
-dependencies = [
-  "ase",
-  "cffi",
-  "numpy",
-  "qcelemental",
-]
+dependencies = ["ase", "cffi", "numpy", "qcelemental", "setuptools"]
 [dependency-groups]
-dev = [
-  "build",
-  "ruff>=0.11.2",
-  "pytest>=8.3.5",
-  "pytest-cov",
-]
+dev = ["build", "ruff>=0.11.2", "pytest>=8.3.5", "pytest-cov"]
 
 # uv config
 [tool.uv]
@@ -41,23 +31,22 @@ package = false
 url = "https://mirror.nju.edu.cn/pypi/web/simple"
 default = true
 
-
 # pytest config
 [tool.pytest.ini_options]
 addopts = '--maxfail=1 -rf' # exit after 1 failures, report fail info
 testpaths = ["tests"]
 filterwarnings = [
-    "error", # All other warnings are transformed into errors.
-    # ignore the following warnings that matching a regex
-    'ignore:invalid escape sequence:SyntaxWarning',
-    'ignore:module \Ssre_parse\S is deprecated:DeprecationWarning',
-    'ignore:module \Ssre_constants\S is deprecated:DeprecationWarning',
-    'ignore::pytest.PytestUnraisableExceptionWarning',
-    'ignore::pytest.PytestDeprecationWarning',
-    'ignore:distutils:DeprecationWarning',
-    'ignore::ResourceWarning',
-    'ignore::UserWarning',
-    'ignore:\Storch\S:FutureWarning',
+  "error", # All other warnings are transformed into errors.
+  # ignore the following warnings that matching a regex
+  'ignore:invalid escape sequence:SyntaxWarning',
+  'ignore:module \Ssre_parse\S is deprecated:DeprecationWarning',
+  'ignore:module \Ssre_constants\S is deprecated:DeprecationWarning',
+  'ignore::pytest.PytestUnraisableExceptionWarning',
+  'ignore::pytest.PytestDeprecationWarning',
+  'ignore:distutils:DeprecationWarning',
+  'ignore::ResourceWarning',
+  'ignore::UserWarning',
+  'ignore:\Storch\S:FutureWarning',
 ]
 
 # ruff config
@@ -68,3 +57,7 @@ select = ["F", "E", "W", "UP"]
 ignore = ["F722", "UP035", "UP038"]
 [tool.ruff.pydocstyle]
 convention = "google"
+
+[tool.cibuildwheel]
+skip = ["*-win32", "*-manylinux_i686", "*-musllinux*"]
+build-verbosity = 1

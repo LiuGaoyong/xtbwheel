@@ -35,7 +35,7 @@ xtb_dep = dependency(
     'c_api=true',
   ],
 )
-# TODO: replace with include/_xtb.h containing only ``#include "xtb.h"``
+# xtb_dep = dependency('xtb-latest', static: true)
 xtb_header = files('include' / 'xtb.h')
 
 cc = meson.get_compiler('c')
